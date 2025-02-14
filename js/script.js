@@ -28,21 +28,21 @@ includeHTML();
 
 document.addEventListener("DOMContentLoaded", async function () {
     try {
-        // Obtém a URL atual
+
         const urlAtual = window.location.pathname.toLowerCase();
 
-        // Verifica se está na página inicial
+
         const isPaginaInicial = urlAtual === "/" || urlAtual.endsWith("index.html");
 
         let categoriaEncontrada = null;
-        let produtosJson = "produtos.json"; // Define o JSON padrão para a página inicial
+        let produtosJson = "produtos.json";
 
         if (!isPaginaInicial) {
-            // Carrega as categorias
+
             const categoriasResponse = await fetch("categorias.json");
             const categorias = await categoriasResponse.json();
 
-            // Verifica se a URL contém alguma das categorias
+
             for (let categoriaObj of categorias) {
                 let categoria = categoriaObj.category.toLowerCase();
                 if (urlAtual.includes(categoria)) {
