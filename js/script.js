@@ -26,100 +26,97 @@ includeHTML();
 
 
 
-
-
-
 document.addEventListener("DOMContentLoaded", async function () {
-try {
-    // Obtém a URL atual
-    const urlAtual = window.location.href.toLowerCase();
+    try {
+        // Obtém a URL atual
+        const urlAtual = window.location.pathname.toLowerCase();
 
-    
-    
-    // Carrega as categorias
-    const categoriasResponse = await fetch("categorias.json");
-    const categorias = await categoriasResponse.json();
-    
-    let categoriaEncontrada = null;
-    
-    // Verifica se a URL contém alguma das categorias
-    for (let categoriaObj of categorias) {
-        let categoria = categoriaObj.category.toLowerCase();
-        if (urlAtual.includes(categoria)) {
-            categoriaEncontrada = categoria;
-            break;
-        }
-    }
-    
-    if (!categoriaEncontrada) {
-        console.warn("Nenhuma categoria correspondente encontrada.");
-        return;
-    }
-    
-    // Carrega o JSON da categoria correspondente
-    const produtosResponse = await fetch(`${categoriaEncontrada}.json`);
-    const produtos = await produtosResponse.json();
-    
-    const container = document.getElementById("product-container");
-    
-    // Limpa o container antes de inserir novos produtos
-    container.innerHTML = "";
+        // Verifica se está na página inicial
+        const isPaginaInicial = urlAtual === "/" || urlAtual.endsWith("index.html");
 
+        let categoriaEncontrada = null;
+        let produtosJson = "produtos.json"; // Define o JSON padrão para a página inicial
 
-// Insere os produtos na página
-for (let produto of produtos) {
-    let logo = produto.logo;
-    if (produto.logo.toLowerCase() === "amazon") {
-        logo = "img/Amazon-Logo.png";
-    } else if (produto.logo.toLowerCase() === "shopee") {
-        logo = "img/shopee-logo.png";
-    }
+        if (!isPaginaInicial) {
+            // Carrega as categorias
+            const categoriasResponse = await fetch("categorias.json");
+            const categorias = await categoriasResponse.json();
 
-    const card = document.createElement("div");
-    card.className = "col";
-    card.innerHTML = `
-        <div class="card h-100 border-0 rounded--custom text-center">
-            <a class="img-prod" href="${produto.url}" target="_blank">
-                <img src="${produto.image}" class="card-img-top" alt="${produto.name}">
-            </a>
-            <!-- <img class="logo-brand" src="${logo}" alt="logo da marca"> -->
-            <div class="card-body">
-                <div class="rating">
-                    <span class="stars" data-rating="${produto.rating}"></span>
-                    <span class="rating-text">${produto.rating}</span>
-                </div>
-                <a href="${produto.url}" class="card-title" target="_blank">${produto.name}</a>
-                <p style="display: none!important;">${produto.price}</p>
-            </div>
-        </div>
-    `;
-    container.appendChild(card);
-}
-
-    
-    // Atualiza as estrelas de avaliação
-    document.querySelectorAll(".stars").forEach(el => {
-        let rating = parseFloat(el.getAttribute("data-rating"));
-        let starsHTML = "";
-        
-        for (let i = 1; i <= 5; i++) {
-            if (rating >= 4.7) {
-                starsHTML += '<i class="bi bi-star-fill"></i>';
-            } else if (rating > 4.4 && rating < 4.6 && i === 5) {
-                starsHTML += '<i class="bi bi-star-half"></i>';
-            } else if (rating <= 4.4 && i === 5) {
-                starsHTML += '<i class="bi bi-star"></i>';
-            } else {
-                starsHTML += '<i class="bi bi-star-fill"></i>';
+            // Verifica se a URL contém alguma das categorias
+            for (let categoriaObj of categorias) {
+                let categoria = categoriaObj.category.toLowerCase();
+                if (urlAtual.includes(categoria)) {
+                    categoriaEncontrada = categoria;
+                    produtosJson = `${categoriaEncontrada}.json`;
+                    break;
+                }
             }
         }
+
+        // Carrega os produtos do JSON correto
+        const produtosResponse = await fetch(produtosJson);
+        const produtos = await produtosResponse.json();
+
+        const container = document.getElementById("product-container");
+
+        // Limpa o container antes de inserir novos produtos
+        container.innerHTML = "";
+
+        // Insere os produtos na página
+        for (let produto of produtos) {
+            let logo = produto.logo;
+            if (produto.logo.toLowerCase() === "amazon") {
+                logo = "img/Amazon-Logo.png";
+            } else if (produto.logo.toLowerCase() === "shopee") {
+                logo = "img/shopee-logo.png";
+            }
+
+            const card = document.createElement("div");
+            card.className = "col";
+            card.innerHTML = `
+                <div class="card h-100 border-0 rounded--custom text-center">
+                    <a class="img-prod" href="${produto.url}" target="_blank">
+                        <img src="${produto.image}" class="card-img-top" alt="${produto.name}">
+                    </a>
+                    <div class="card-body">
+                        <div class="rating">
+                            <span class="stars" data-rating="${produto.rating}"></span>
+                            <span class="rating-text">${produto.rating}</span>
+                        </div>
+                        <a href="${produto.url}" class="card-title" target="_blank">${produto.name}</a>
+                        <p style="display: none!important;">${produto.price}</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        document.querySelectorAll(".stars").forEach(el => {
+            let rating = parseFloat(el.getAttribute("data-rating"));
+            let starsHTML = "";
         
-        el.innerHTML = starsHTML;
-    });
-} catch (error) {
-    console.error("Erro ao carregar os produtos:", error);
-}
+            for (let i = 1; i <= 5; i++) {
+                if (rating >= i || rating > 4.6 ) {
+                    // Adiciona estrela cheia se a nota for maior ou igual ao índice
+                    starsHTML += '<i class="bi bi-star-fill"></i>';
+                } else if (rating >= i - 0.5 && rating < i ) {
+                    // Adiciona estrela pela metade se a nota estiver entre (i - 0.5) e i
+                    starsHTML += '<i class="bi bi-star-half"></i>';
+                } else {
+                    // Adiciona estrela vazia para completar as 5 estrelas
+                    starsHTML += '<i class="bi bi-star"></i>';
+                }
+            }
+        
+            el.innerHTML = starsHTML;
+        });
+        
+        
+    } catch (error) {
+        console.error("Erro ao carregar os produtos:", error);
+    }
 });
+
 
 
 
