@@ -20,6 +20,10 @@ elements.forEach(function(el) {
 });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+includeHTML();
+});
+
 
 
 
@@ -74,11 +78,11 @@ for (let produto of produtos) {
     const card = document.createElement("div");
     card.className = "col";
     card.innerHTML = `
-        <div class="card h-100 border-0 rounded-pill text-center">
+        <div class="card h-100 border-0 rounded--custom text-center">
             <a class="img-prod" href="${produto.url}" target="_blank">
                 <img src="${produto.image}" class="card-img-top" alt="${produto.name}">
             </a>
-            <img class="logo-brand" src="${logo}" alt="logo da marca">
+            <!-- <img class="logo-brand" src="${logo}" alt="logo da marca"> -->
             <div class="card-body">
                 <div class="rating">
                     <span class="stars" data-rating="${produto.rating}"></span>
@@ -135,36 +139,6 @@ function addProduct() {
     document.getElementById("jsonOutput").value = JSON.stringify({ products }, null, 2);
 }
 
-function downloadJSON() {
-    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ products }, null, 2));
-    let downloadAnchor = document.createElement("a");
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "catalogo.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    document.body.removeChild(downloadAnchor);
-}
-
-
-function checkVisibility() {
-    const banner = document.getElementById('bannerSlim');
-    const rect = banner.getBoundingClientRect();
-    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-
-    if (rect.top <= windowHeight && rect.bottom >= 0) {
-        banner.classList.add('banner-visible');
-    }
-}
-
-function hideBanner() {
-    const banner = document.getElementById('bannerSlim');
-    banner.style.opacity = '0';
-    setTimeout(() => {
-        banner.style.display = 'none';
-    }, 500); // Tempo do fade-out
-}
-
-document.addEventListener('scroll', checkVisibility);
 
 
 document.addEventListener("DOMContentLoaded", function () {
