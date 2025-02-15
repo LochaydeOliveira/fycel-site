@@ -126,8 +126,15 @@ font-size: 13px;
 }
 
 .navbar-nav {
-  margin: 2rem 0 auto!important;
-  gap: 3px;
+  margin: 0 auto!important;
+  gap: 2rem;
+}
+
+@media (max-width: 425px) {
+.navbar-nav {
+    margin: 2rem 0 auto!important;
+    gap: 3px;
+  }
 }
 
 .navbar-nav a {
