@@ -159,9 +159,29 @@ font-size: 13px;
 }
 
 .navbar-nav a {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
+  position: relative;
+  text-decoration: none;
+  display: inline-block;
+  padding-bottom: 5px; /* Espaço para a barra */
 }
+
+.navbar-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffbd59; /* Cor da barra */
+  transition: width 0.3s ease-in-out;
+}
+
+.navbar-nav a:hover::after {
+  width: 100%;
+}
+
 
 .h1-destaque {
   font-size: 23px!important;
