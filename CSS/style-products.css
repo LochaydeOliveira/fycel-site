@@ -133,7 +133,6 @@ font-size: 13px;
 @media (max-width: 425px) {
 .navbar-nav {
     margin: 2rem 0 auto!important;
-    gap: 3px;
   }
 }
 
