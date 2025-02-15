@@ -225,15 +225,15 @@ footer div hr {
   padding: 10px 20px;
   font-size: 15px;
   border: none;
-  background-color: #dc3545db;
+  background-color: #6d6c6adb;
   color: white;
   cursor: pointer;
-  box-shadow: 2px 2px 10px 3px rgb(219 46 46 / 43%);
+  box-shadow: 2px 2px 10px 3px rgba(121, 121, 121, 0.43);
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 #btnTopo:hover {
-  background-color: #c22033;
+  background-color: #474747;
   transform: scale(1.1);
 }
 
@@ -276,4 +276,13 @@ footer div hr {
   background: #444444;
   color: #fff;
 
+}
+
+#logo-footer {
+  justify-content: center!important;
+
+}
+
+#logo-footer  .col-content {
+  text-align: center!important;
 }
